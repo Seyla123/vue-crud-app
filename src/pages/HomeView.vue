@@ -9,7 +9,6 @@ const isLoading = ref(true);
 const data = ref([]);
 onMounted(async () => {
   try {
-    isLoading.value = true;
     const response = await axios.get("http://localhost:8000/notes");
     data.value = response.data;
   } catch (error) {
@@ -27,10 +26,6 @@ onMounted(async () => {
   <p v-if="isLoading">Loading...</p>
   <!-- Notes -->
   <section v-else-if="data.length > 0" class="grid sm:grid-cols-2 gap-2">
-    <NoteCard
-      v-for="note in data"
-      :key="note.id"
-      :note="note"
-    />
+    <NoteCard v-for="note in data" :key="note.id" :note="note" />
   </section>
 </template>

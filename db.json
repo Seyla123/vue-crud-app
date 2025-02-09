@@ -70,6 +70,28 @@
       "date": "01 july 2024",
       "tag": "vue"
     }
+  ],
+  "tags": [
+    {
+      "id": 1,
+      "name": "math"
+    },
+    {
+      "id": 2,
+      "name": "vue"
+    },
+    {
+      "id": 3,
+      "name": "css"
+    },
+    {
+      "id": 4,
+      "name": "icon"
+    },
+    {
+      "id": 5,
+      "name": "dev"
+    }
   ]
 }
 
