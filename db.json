@@ -1,0 +1,75 @@
+{
+  "notes": [
+    {
+      "id": 1,
+      "title": "Hello Vue",
+      "content": "This is a sample post. It is a very good framework. It is very easy to learn and use. It is also very powerful.",
+      "date": "08 june 2024",
+      "tag": "math"
+    },
+    {
+      "id": 2,
+      "title": "JSON Server",
+      "content": "It helps mock APIs easily. It is a simple and easy to use tool. It is also very powerful.",
+      "date": "12 june 2024",
+      "tag": "vue"
+    },
+    {
+      "id": 3,
+      "title": "Tailwind CSS",
+      "content": "It is a utility first CSS framework. It is a very good alternative to Bootstrap. It is also very easy to learn and use.",
+      "date": "15 june 2024",
+      "tag": "css"
+    },
+    {
+      "id": 4,
+      "title": "Lucide",
+      "content": "It is a icon collection. It is a very good alternative to Font Awesome. It is also very easy to learn and use.",
+      "date": "17 june 2024",
+      "tag": "icon"
+    },
+    {
+      "id": 5,
+      "title": "Vue Router",
+      "content": "It is a client side router. It is a very good alternative to React Router. It is also very easy to learn and use.",
+      "date": "20 june 2024",
+      "tag": "vue"
+    },
+    {
+      "id": 6,
+      "title": "Vite",
+      "content": "It is a build tool. It is a very good alternative to Webpack. It is also very easy to learn and use.",
+      "date": "24 june 2024",
+      "tag": "dev"
+    },
+    {
+      "id": 7,
+      "title": "Vue 3",
+      "content": "It is a JavaScript framework. It is a very good alternative to React. It is also very easy to learn and use.",
+      "date": "26 june 2024",
+      "tag": "vue"
+    },
+    {
+      "id": 8,
+      "title": "Vuetify",
+      "content": "It is a UI framework. It is a very good alternative to Material Design. It is also very easy to learn and use.",
+      "date": "28 june 2024",
+      "tag": "vue"
+    },
+    {
+      "id": 9,
+      "title": "Vue CLI",
+      "content": "It is a tool for generating Vue projects. It is a very good alternative to Create React App. It is also very easy to learn and use.",
+      "date": "30 june 2024",
+      "tag": "vue"
+    },
+    {
+      "id": 10,
+      "title": "Vue Devtools",
+      "content": "It is a tool for debugging Vue projects. It is a very good alternative to React Devtools. It is also very easy to learn and use.",
+      "date": "01 july 2024",
+      "tag": "vue"
+    }
+  ]
+}
+

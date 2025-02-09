@@ -1,19 +1,36 @@
 <script setup>
-import Header from "@/components/Header.vue";
 import Search from "@/components/Search.vue";
 import TagCategory from "@/components/TagCategory.vue";
 import NoteCard from "@/components/NoteCard.vue";
+import { ref, onMounted } from "vue";
+import axios from "axios";
+
+const isLoading = ref(true);
+const data = ref([]);
+onMounted(async () => {
+  try {
+    isLoading.value = true;
+    const response = await axios.get("http://localhost:8000/notes");
+    data.value = response.data;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    isLoading.value = false;
+  }
+});
 </script>
 <template>
-    <!-- Hero Section and Search bar-->
-    <Search />
-    <!-- Recently Notes -->
-    <TagCategory />
-    <!-- Notes -->
-    <section class="grid sm:grid-cols-2 gap-2 ">
-      <NoteCard title="This is my day" content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec id elit non mi porta gravida at eget metus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus." tag="Math" date="07 June 2024"/>
-      <NoteCard title="This is my day" content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec id elit non mi porta gravida at eget metus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus." tag="Math" date="07 June 2024"/>
-      <NoteCard title="This is my day" content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec id elit non mi porta gravida at eget metus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus." tag="Math" date="07 June 2024"/>
-      <NoteCard title="This is my day" content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec id elit non mi porta gravida at eget metus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus." tag="Math" date="07 June 2024"/>
-    </section>
+  <!-- Hero Section and Search bar-->
+  <Search />
+  <!-- Recently Notes -->
+  <TagCategory />
+  <p v-if="isLoading">Loading...</p>
+  <!-- Notes -->
+  <section v-else-if="data.length > 0" class="grid sm:grid-cols-2 gap-2">
+    <NoteCard
+      v-for="note in data"
+      :key="note.id"
+      :note="note"
+    />
+  </section>
 </template>
