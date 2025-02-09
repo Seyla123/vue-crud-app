@@ -1,0 +1,1 @@
+<template>Hero Section and Search bar</template>

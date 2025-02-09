@@ -1,0 +1,3 @@
+<template>
+    Recently Notes
+</template>
