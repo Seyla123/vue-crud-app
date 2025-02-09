@@ -21,7 +21,8 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <section class="flex gap-2">
+  <p v-if="isLoading">Loading...</p>
+  <section v-else class="flex gap-2">
     <Tag
       v-for="tag in tags"
       :key="tag"

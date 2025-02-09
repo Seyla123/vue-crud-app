@@ -2,11 +2,16 @@
 import Search from "@/components/Search.vue";
 import TagCategory from "@/components/TagCategory.vue";
 import NoteCard from "@/components/NoteCard.vue";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import axios from "axios";
 
 const isLoading = ref(true);
 const data = ref([]);
+const dataLimit = ref(4);
+
+const limitedData = computed(() => {
+  return data.value.slice(0, dataLimit.value);
+});
 onMounted(async () => {
   try {
     const response = await axios.get("http://localhost:8000/notes");
@@ -23,9 +28,25 @@ onMounted(async () => {
   <Search />
   <!-- Recently Notes -->
   <TagCategory />
-  <p v-if="isLoading">Loading...</p>
+  <div v-if="isLoading" class="flex justify-center items-center h-full">
+    Loading...
+  </div>
   <!-- Notes -->
+  <div
+    v-else-if="data.length == 0"
+    class="flex justify-center items-center h-full"
+  >
+    No Notes
+  </div>
   <section v-else-if="data.length > 0" class="grid sm:grid-cols-2 gap-2">
-    <NoteCard v-for="note in data" :key="note.id" :note="note" />
+    <NoteCard v-for="note in limitedData" :key="note.id" :note="note" />
   </section>
+  <div v-if="data.length > dataLimit" class="flex justify-center w-full">
+    <button
+    @click="dataLimit += 4"
+      class="bg-[#6c63ff] cursor-pointer text-white px-4 py-2 rounded-full hover:bg-[#6c63ff]/90 transition duration-300 ease-in-out"
+    >
+      more
+    </button>
+  </div>
 </template>
