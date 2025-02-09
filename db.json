@@ -22,13 +22,6 @@
       "tag": "vue"
     },
     {
-      "title": "Vite updated",
-      "content": "up It is a build tool. It is a very good alternative to Webpack. It is also very easy to learn and use.",
-      "tag": "dev",
-      "date": "2025-02-04",
-      "id": "6"
-    },
-    {
       "id": "7",
       "title": "Vue 3",
       "content": "It is a JavaScript framework. It is a very good alternative to React. It is also very easy to learn and use.",

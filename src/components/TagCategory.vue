@@ -2,12 +2,11 @@
 import Tag from "@/components/Tag.vue";
 import axios from "axios";
 import { ref, onMounted } from "vue";
-
+defineProps({
+  handleClickTag: Function,
+  selectedTag: String,
+});
 const tags = ref([]);
-const selectedTag = ref("");
-const handleTagClick = (tag) => {
-  selectedTag.value = tag;
-};
 const isLoading = ref(true);
 onMounted(async () => {
   try {
@@ -25,10 +24,10 @@ onMounted(async () => {
   <section v-else class="flex gap-2">
     <Tag
       v-for="tag in tags"
-      :key="tag"
+      :key="tag.id"
       :tag="tag.name"
-      :isActive="selectedTag === tag.id"
-      @click="handleTagClick(tag.id)"
+      :isActive="selectedTag === tag.name"
+      @click="handleClickTag(tag.name)"
     />
   </section>
 </template>
