@@ -6,7 +6,7 @@ defineProps({
   },
   isActive: {
     type: Boolean,
-    withDefaults: false,
+    default: false,
   },
 });
 </script>
