@@ -52,7 +52,7 @@ onMounted(async () => {
         </RouterLink>
         <button
           type="button"
-          class="text-gray-600 hover:text-gray-900"
+          class="text-gray-600 cursor-pointer hover:text-gray-900"
           @click="handleDelete"
         >
           <TrashIcon class="w-6 h-6" />

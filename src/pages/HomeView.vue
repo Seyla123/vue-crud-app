@@ -35,7 +35,7 @@ const handleClickTag = async (tag) => {
 onMounted(async () => {
   try {
     const response = await axios.get("http://localhost:8000/notes");
-    data.value = response.data;
+    data.value = response.data.reverse();
   } catch (error) {
     console.log(error);
   } finally {
