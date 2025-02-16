@@ -7,9 +7,9 @@ import NoteEdit from "@/pages/NoteEdit.vue";
 
 const routes = [
   { path: "/", component: HomeView },
-  {path:'/notes', component: NoteCreate},
+  { path: "/notes", component: NoteCreate },
   { path: "/notes/:id", component: NoteView },
-  { path: "/notes/:id/edit", component:NoteEdit}
+  { path: "/notes/:id/edit", component: NoteEdit },
 ];
 
 const router = createRouter({
