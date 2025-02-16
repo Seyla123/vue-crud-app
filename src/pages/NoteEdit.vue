@@ -4,7 +4,9 @@ import { ArrowLeftIcon } from "lucide-vue-next";
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import NoteForm from "@/components/NoteForm.vue";
+import { useTitle } from "@vueuse/core";
 
+const title = useTitle("Edit Note");
 const route = useRoute();
 const router = useRouter();
 

@@ -1,8 +1,11 @@
 <script setup>
+import { useTitle } from "@vueuse/core";
 import axios from "axios";
 import { ArrowLeftIcon, PencilIcon, TrashIcon } from "lucide-vue-next";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+
+const title = useTitle("Note Detail");
 
 const route = useRoute();
 const router = useRouter();

@@ -2,8 +2,16 @@
 import Search from "@/components/Search.vue";
 import TagCategory from "@/components/TagCategory.vue";
 import NoteCard from "@/components/NoteCard.vue";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import axios from "axios";
+import { useTitle, useDark } from "@vueuse/core";
+
+const isDark = useDark();
+const title = useTitle("Home");
+
+title.value = isDark.value
+  ? `🌙 Good evening : ${title.value}`
+  : "☀️ Good morning " + title.value;
 
 const isLoading = ref(true);
 const data = ref([]);
@@ -11,14 +19,16 @@ const dataLimit = ref(4);
 const selectedTag = ref("");
 
 const searchData = ref([]);
-const search = ref('');
+const search = ref("");
 const limitedData = computed(() => {
   return data.value.slice(0, dataLimit.value);
 });
 
 const handleSearch = (event) => {
   search.value = event.target.value.toLowerCase();
-  searchData.value = data.value.filter((note) => note.title.toLowerCase().includes(search.value));
+  searchData.value = data.value.filter((note) =>
+    note.title.toLowerCase().includes(search.value)
+  );
 };
 const handleClickTag = async (tag) => {
   try {
@@ -58,8 +68,8 @@ onMounted(async () => {
   >
     No Notes
   </div>
-  
-  <section v-else-if="search !=''" class="grid sm:grid-cols-2 gap-2">
+
+  <section v-else-if="search != ''" class="grid sm:grid-cols-2 gap-2">
     <NoteCard v-for="note in searchData" :key="note.id" :note="note" />
   </section>
   <section v-else-if="data.length > 0" class="grid sm:grid-cols-2 gap-2">
