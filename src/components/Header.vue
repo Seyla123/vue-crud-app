@@ -10,7 +10,7 @@ import { Plus } from "lucide-vue-next";
       </span>
     </RouterLink>
     <!-- Add Note -->
-    <RouterLink to="/notes">
+    <RouterLink to="/test">
       <button class="bg-[#6c63ff] rounded-full p-2 cursor-pointer">
         <Plus size="24" color="#fff" />
       </button>

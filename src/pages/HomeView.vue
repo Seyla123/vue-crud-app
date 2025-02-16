@@ -2,19 +2,36 @@
 import Search from "@/components/Search.vue";
 import TagCategory from "@/components/TagCategory.vue";
 import NoteCard from "@/components/NoteCard.vue";
-import { ref, onMounted, computed, watch } from "vue";
-import axios from "axios";
+import { ref, computed, reactive } from "vue";
 import { useTitle, useDark } from "@vueuse/core";
+import { useGetNote } from "@/services/noteApi";
+import { useGetTag } from "@/services/tagApi";
 
+// query to get notes by tag name
+const selected = reactive({
+  tag: null,
+});
+
+// query to get tags
+const { data: tags, isLoading: isTagLoading, error: tagError } = useGetTag();
+
+// query to get notes
+const { data, isLoading } = useGetNote(selected);
+
+// handle click tag
+const handleClickTag = async (tag) => {
+  selected.tag = tag;
+};
+/* 
+ this is for check if dark mode or not,
+ then say good morning or good evening base on that
+*/
 const isDark = useDark();
 const title = useTitle("Home");
-
 title.value = isDark.value
-  ? `🌙 Good evening : ${title.value}`
+  ? `'🌙 Good evening : ${title.value}`
   : "☀️ Good morning " + title.value;
 
-const isLoading = ref(true);
-const data = ref([]);
 const dataLimit = ref(4);
 const selectedTag = ref("");
 
@@ -30,34 +47,21 @@ const handleSearch = (event) => {
     note.title.toLowerCase().includes(search.value)
   );
 };
-const handleClickTag = async (tag) => {
-  try {
-    isLoading.value = true;
-    selectedTag.value = tag;
-    const response = await axios.get("http://localhost:8000/notes?tag=" + tag);
-    data.value = response.data;
-  } catch (error) {
-    console.log(error);
-  } finally {
-    isLoading.value = false;
-  }
-};
-onMounted(async () => {
-  try {
-    const response = await axios.get("http://localhost:8000/notes");
-    data.value = response.data.reverse();
-  } catch (error) {
-    console.log(error);
-  } finally {
-    isLoading.value = false;
-  }
-});
 </script>
 <template>
   <!-- Hero Section and Search bar-->
   <Search :handleSearch="handleSearch" />
-  <!-- Recently Notes -->
-  <TagCategory :handleClickTag="handleClickTag" :selectedTag="selectedTag" />
+
+  <!-- catogory Notes -->
+  <TagCategory
+    :handleClickTag="handleClickTag"
+    :selectedTag="selectedTag"
+    :tags="tags"
+    :isLoading="isTagLoading"
+    :error="tagError"
+  />
+
+  <!-- if note is laoding -->
   <div v-if="isLoading" class="flex justify-center items-center h-full">
     Loading...
   </div>
@@ -76,7 +80,7 @@ onMounted(async () => {
     <NoteCard v-for="note in limitedData" :key="note.id" :note="note" />
   </section>
   <div
-    v-if="data.length > dataLimit && !isLoading"
+    v-if="data?.length > dataLimit && !isLoading"
     class="flex justify-center w-full"
   >
     <button
