@@ -1,46 +1,37 @@
 <script setup>
 import axios from "axios";
 import { ArrowLeftIcon } from "lucide-vue-next";
-import { ref, watch, computed } from "vue";
+import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import NoteForm from "@/components/NoteForm.vue";
 import { useTitle } from "@vueuse/core";
+import { useCreateNote } from "@/services/noteApi";
 
-const title = useTitle("Create Note");
 const router = useRouter();
+
+// page title
+useTitle("Create Note");
+
+// note create form state
 const note = ref({
   title: "",
   content: "",
   tag: "",
   date: "",
 });
-const isCreating = ref(false);
-const error = ref("");
 
+// create note use mutation
+const { mutate: createNote, isLoading: isCreating, error } = useCreateNote();
+
+// create note
 const handleSubmit = async () => {
   try {
-    isCreating.value = true;
-    const response = await axios.post("http://localhost:8000/notes/", {
-      title: note.value.title,
-      content: note.value.content,
-      tag: note.value.tag,
-      date: note.value.date,
-    });
+    createNote(note.value);
     router.push("/");
   } catch (err) {
     console.log(err);
-    error.value = err?.message;
-  } finally {
-    isCreating.value = false;
   }
 };
-
-watch(
-  () => ({ ...note.value }),
-  (newNote) => {
-    console.log("this is note :", newNote);
-  }
-);
 </script>
 <template>
   <div class="space-y-4">
@@ -51,7 +42,7 @@ watch(
           <span>Back</span>
         </span>
       </RouterLink>
-    </div> 
+    </div>
 
     <!-- note create form -->
     <NoteForm v-model="note" @submit="handleSubmit" />

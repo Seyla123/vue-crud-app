@@ -4,6 +4,10 @@ import { defineProps, defineEmits, computed } from "vue";
 defineEmits(["submit", "update:modelValue"]);
 const props = defineProps({
   modelValue: Object,
+  btnTitle:{
+    type: String,
+    default: "Create",
+  }
 });
 const note = computed({
   get: () => props.modelValue,
@@ -52,7 +56,7 @@ const note = computed({
       type="submit"
       class="bg-[#6c63ff] text-white px-4 py-2 rounded-lg hover:bg-[#6c63ff]/90 transition duration-300 ease-in-out"
     >
-      Update
+      {{ btnTitle }}
     </button>
   </form>
 </template>

@@ -1,17 +1,22 @@
 <script setup>
 import axios from "axios";
 import { ArrowLeftIcon } from "lucide-vue-next";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import NoteForm from "@/components/NoteForm.vue";
 import { useTitle } from "@vueuse/core";
+import { useUpdateNote, useGetNoteById } from "@/services/noteApi";
 
+// page title
 const title = useTitle("Edit Note");
+
 const route = useRoute();
 const router = useRouter();
 
+// get note id from route parameter
 const id = route.params.id;
 
+// note update form state
 const note = ref({
   title: "",
   content: "",
@@ -19,34 +24,39 @@ const note = ref({
   date: "",
 });
 
-const isLoading = ref(true);
-const isError = ref(false);
-const error = ref("");
+// query to get note by id
+const { data, isLoading, error, isError } = useGetNoteById(id);
+
+watch(
+  data,
+  (newData) => {
+    if (newData) {
+      note.value = { ...newData };
+    }
+  },
+  { immediate: true }
+);
+
+// update note use mutation
+const { mutate: updateNote } = useUpdateNote();
+
+// handle note update
 const handleSubmit = async () => {
-  try {
-    const response = await axios.put("http://localhost:8000/notes/" + id, {
-      title: note.value.title,
-      content: note.value.content,
-      tag: note.value.tag,
-      date: note.value.date,
-    });
-    router.push("/notes/" + id);
-  } catch (err) {
-    console.log(err);
-  }
+  updateNote(
+    {
+      id: id,
+      body: note.value,
+    },
+    {
+      onSuccess: () => {
+        router.push("/");
+      },
+      onError: (err) => {
+        console.error("Error updating note:", err);
+      },
+    }
+  );
 };
-onMounted(async () => {
-  try {
-    const response = await axios.get("http://localhost:8000/notes/" + id);
-    note.value = response.data;
-  } catch (err) {
-    isError.value = true;
-    error.value = err?.message;
-    console.log(err);
-  } finally {
-    isLoading.value = false;
-  }
-});
 </script>
 <template>
   <div class="space-y-4">
@@ -74,6 +84,6 @@ onMounted(async () => {
     </div>
 
     <!-- note edit form -->
-    <NoteForm v-else v-model="note" @submit="handleSubmit" />
+    <NoteForm v-else v-model="note" @submit="handleSubmit" btnTitle="Update" />
   </div>
 </template>
