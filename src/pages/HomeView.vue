@@ -33,7 +33,6 @@ title.value = isDark.value
   : "☀️ Good morning " + title.value;
 
 const dataLimit = ref(4);
-const selectedTag = ref("");
 
 const searchData = ref([]);
 const search = ref("");
@@ -47,6 +46,7 @@ const handleSearch = (event) => {
     note.title.toLowerCase().includes(search.value)
   );
 };
+
 </script>
 <template>
   <!-- Hero Section and Search bar-->
@@ -55,7 +55,7 @@ const handleSearch = (event) => {
   <!-- catogory Notes -->
   <TagCategory
     :handleClickTag="handleClickTag"
-    :selectedTag="selectedTag"
+    :selectedTag="selected.tag"
     :tags="tags"
     :isLoading="isTagLoading"
     :error="tagError"

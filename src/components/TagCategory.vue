@@ -13,6 +13,7 @@ defineProps({
 </script>
 <template>
   <p v-if="isLoading">Loading...</p>
+
   <p v-else-if="error">Error: {{ error }}></p>
   <section v-else class="flex gap-2">
     <Tag
@@ -21,6 +22,11 @@ defineProps({
       :tag="tag.name"
       :isActive="selectedTag === tag.name"
       @click="handleClickTag(tag.name)"
+    />
+    <Tag
+      :tag="'All'"
+      :isActive="selectedTag === ''"
+      @click="handleClickTag('')"
     />
   </section>
 </template>
