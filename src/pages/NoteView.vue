@@ -1,9 +1,10 @@
 <script setup>
-import { useDeleteNote, useGetNoteById } from "@/services/noteApi";
+import {  useGetNoteById } from "@/services/noteApi";
 import { useTitle } from "@vueuse/core";
 import { ArrowLeftIcon, PencilIcon, TrashIcon } from "lucide-vue-next";
-import { ref, watch } from "vue";
+import { reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import ModalDelete from "@/components/ModalDelete.vue";
 
 // page title
 useTitle("Note Detail");
@@ -17,8 +18,13 @@ const id = route.params.id;
 // note detail state
 const note = ref({});
 
+const isModalOpen = reactive({
+  deleteModal: false,
+});
+
+console.log("this is log : ", isModalOpen.deleteModal);
 // query to get note by id
-const { data, isLoading } = useGetNoteById(id);
+const { data, isLoading, isError,error } = useGetNoteById(id);
 
 /*
   watch note data loaded from query,
@@ -34,19 +40,8 @@ watch(
   { immediate: true }
 );
 
-// mutate to delete note
-const { mutate: deleteNote, isError, error } = useDeleteNote();
 //delete note
-const handleDelete = () => {
-  deleteNote(id, {
-    onSuccess: () => {
-      router.push("/");
-    },
-    onError: (err) => {
-      console.error("Error deleting note:", err);
-    },
-  });
-};
+
 </script>
 <template>
   <div class="space-y-4">
@@ -71,7 +66,7 @@ const handleDelete = () => {
         <button
           type="button"
           class="text-gray-600 cursor-pointer hover:text-gray-900"
-          @click="handleDelete"
+          @click.prevent="isModalOpen.deleteModal = true"
         >
           <TrashIcon class="w-6 h-6" />
         </button>
@@ -104,4 +99,5 @@ const handleDelete = () => {
       </p>
     </div>
   </div>
+  <ModalDelete v-if="isModalOpen.deleteModal" v-model="isModalOpen.deleteModal" :noteId="note.id"/>
 </template>

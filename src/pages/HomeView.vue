@@ -40,12 +40,20 @@ const limitedData = computed(() => {
   return data.value.slice(0, dataLimit.value);
 });
 
+/**
+ * Handles the search input to filter notes based on the search query.
+ * Updates the searchData with notes whose titles include the input value.
+ * 
+ * @param {Event} event - The input event containing the search query.
+ */
+
 const handleSearch = (event) => {
   search.value = event.target.value.toLowerCase();
   searchData.value = data.value.filter((note) =>
     note.title.toLowerCase().includes(search.value)
   );
 };
+
 
 </script>
 <template>

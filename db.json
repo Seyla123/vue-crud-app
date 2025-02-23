@@ -1,34 +1,6 @@
 {
   "notes": [
     {
-      "id": "3",
-      "title": "Tailwind CSS",
-      "content": "It is a utility first CSS framework. It is a very good alternative to Bootstrap. It is also very easy to learn and use.",
-      "date": "2024-06-15",
-      "tag": "css"
-    },
-    {
-      "id": "4",
-      "title": "Lucide",
-      "content": "It is a icon collection. It is a very good alternative to Font Awesome. It is also very easy to learn and use.",
-      "date": "2024-06-17",
-      "tag": "icon"
-    },
-    {
-      "id": "5",
-      "body": {
-        "id": "5",
-        "title": "asdf",
-        "content": "asdf",
-        "tag": "asdf",
-        "date": "2025-02-21"
-      },
-      "title": "1111",
-      "content": "dsf",
-      "tag": "asdf",
-      "date": "2025-02-11"
-    },
-    {
       "id": "9979",
       "title": "sadfasf",
       "content": "sadfasdf",
