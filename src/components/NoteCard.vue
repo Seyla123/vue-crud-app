@@ -1,10 +1,26 @@
 <script setup>
 import { useRouter } from "vue-router";
+import { useDateFormat, useNow } from "@vueuse/core";
+import { computed } from "vue";
 
 const router = useRouter();
 
-defineProps({
-  note: Object,
+const props = defineProps({
+  note: {
+    type: Object,
+    required: true,
+  },
+});
+
+// convert firestore timestamp to readable date
+const formattedDate = (timestamp) => {
+  if (!timestamp) return "No date";
+  const date = timestamp.toDate();
+  return useDateFormat(date, "YYYY-MM-DD HH:mm:ss").value;
+};
+
+const date = computed(() => {
+  return formattedDate(props.note.date);
 });
 </script>
 <template>
@@ -28,7 +44,7 @@ defineProps({
     </p>
     <!-- date -->
     <div class="flex justify-end">
-      <span class="text-sm text-[#6c63ff]/60"> {{ note.date }}</span>
+      <span class="text-sm text-[#6c63ff]/60"> {{ date }}</span>
     </div>
   </div>
 </template>

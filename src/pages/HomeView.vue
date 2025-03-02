@@ -2,10 +2,16 @@
 import Search from "@/components/Search.vue";
 import TagCategory from "@/components/TagCategory.vue";
 import NoteCard from "@/components/NoteCard.vue";
-import { ref, computed, reactive } from "vue";
+import { ref, computed, reactive, onMounted, watch } from "vue";
 import { useTitle, useDark } from "@vueuse/core";
 import { useGetNote } from "@/services/noteApi";
 import { useGetTag } from "@/services/tagApi";
+import { useNoteStore } from "@/stores/noteStore";
+import { storeToRefs } from "pinia";
+
+const noteStore = useNoteStore();
+const { notes: data, isLoading } = storeToRefs(noteStore);
+const { getNotes,deleteNote } = noteStore;
 
 // query to get notes by tag name
 const selected = reactive({
@@ -16,7 +22,12 @@ const selected = reactive({
 const { data: tags, isLoading: isTagLoading, error: tagError } = useGetTag();
 
 // query to get notes
-const { data, isLoading } = useGetNote(selected);
+// const { isLoading } = useGetNote(selected);
+
+onMounted(async () => {
+  await getNotes();
+});
+console.log('loading : ', isLoading.value);
 
 // handle click tag
 const handleClickTag = async (tag) => {
@@ -37,13 +48,13 @@ const dataLimit = ref(4);
 const searchData = ref([]);
 const search = ref("");
 const limitedData = computed(() => {
-  return data.value.slice(0, dataLimit.value);
+  return data?.value?.reverse().slice(0, dataLimit.value);
 });
 
 /**
  * Handles the search input to filter notes based on the search query.
  * Updates the searchData with notes whose titles include the input value.
- * 
+ *
  * @param {Event} event - The input event containing the search query.
  */
 
@@ -53,8 +64,6 @@ const handleSearch = (event) => {
     note.title.toLowerCase().includes(search.value)
   );
 };
-
-
 </script>
 <template>
   <!-- Hero Section and Search bar-->
@@ -75,7 +84,7 @@ const handleSearch = (event) => {
   </div>
   <!-- Notes -->
   <div
-    v-else-if="data.length == 0"
+    v-else-if="data?.length == 0"
     class="flex justify-center items-center h-full"
   >
     No Notes

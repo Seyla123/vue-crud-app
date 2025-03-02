@@ -4,6 +4,10 @@ import { defineProps, defineEmits, computed } from "vue";
 defineEmits(["submit", "update:modelValue"]);
 const props = defineProps({
   modelValue: Object,
+  isLoading:{
+    type: Boolean,
+    default: false
+  },
   btnTitle:{
     type: String,
     default: "Create",
@@ -13,6 +17,7 @@ const note = computed({
   get: () => props.modelValue,
   set: (value) => emit("update:modelValue", value),
 });
+console.log('is loading : ', props.isLoading);
 
 </script>
 <template>
@@ -55,8 +60,11 @@ const note = computed({
     <button
       type="submit"
       class="bg-[#6c63ff] text-white px-4 py-2 rounded-lg hover:bg-[#6c63ff]/90 transition duration-300 ease-in-out"
+      :disabled="isLoading"
     >
-      {{ btnTitle }}
+      <span v-if="isLoading">Loading...</span>
+      <span v-else>{{ btnTitle }}</span>
     </button>
+
   </form>
 </template>

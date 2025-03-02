@@ -6,6 +6,8 @@ import { useRoute, useRouter } from "vue-router";
 import NoteForm from "@/components/NoteForm.vue";
 import { useTitle } from "@vueuse/core";
 import { useUpdateNote, useGetNoteById } from "@/services/noteApi";
+import { useNoteStore } from "@/stores/noteStore";
+import { storeToRefs } from "pinia";
 
 // page title
 const title = useTitle("Edit Note");
@@ -25,13 +27,22 @@ const note = ref({
 });
 
 // query to get note by id
-const { data, isLoading, error, isError } = useGetNoteById(id);
+const noteStore = useNoteStore();
+const { note: data, isLoading, isError, error } = storeToRefs(noteStore);
+const { getOneNote } = noteStore;
+
+// query to get note by id
+onMounted(async () => {
+  await getOneNote(id);
+});
 
 watch(
   data,
   (newData) => {
-    if (newData) {
-      note.value = { ...newData };
+    if (newData?.date) {
+      const date = newData.date.toDate();
+      const formattedDate = date.toISOString().split('T')[0];
+      note.value = { title: newData.title, content: newData.content, tag: newData.tag, date: formattedDate };
     }
   },
   { immediate: true }
@@ -85,5 +96,6 @@ const handleSubmit = async () => {
 
     <!-- note edit form -->
     <NoteForm v-else v-model="note" @submit="handleSubmit" btnTitle="Update" />
+    <p>{{ note.date }}</p>
   </div>
 </template>
