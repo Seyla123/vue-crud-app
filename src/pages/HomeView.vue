@@ -4,8 +4,6 @@ import TagCategory from "@/components/TagCategory.vue";
 import NoteCard from "@/components/NoteCard.vue";
 import { ref, computed, reactive, onMounted, watch } from "vue";
 import { useTitle, useDark } from "@vueuse/core";
-import { useGetNote } from "@/services/noteApi";
-import { useGetTag } from "@/services/tagApi";
 import { useNoteStore } from "@/stores/noteStore";
 import { storeToRefs } from "pinia";
 
@@ -17,9 +15,6 @@ const { getNotes, deleteNote } = noteStore;
 const selected = reactive({
   tag: null,
 });
-
-// query to get tags
-const { data: tags, isLoading: isTagLoading, error: tagError } = useGetTag();
 
 // query to get notes
 // const { isLoading } = useGetNote(selected);
