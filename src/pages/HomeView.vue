@@ -70,15 +70,6 @@ const handleSearch = (event) => {
   <!-- Hero Section and Search bar-->
   <Search :handleSearch="handleSearch" />
 
-  <!-- catogory Notes -->
-  <TagCategory
-    :handleClickTag="handleClickTag"
-    :selectedTag="selected.tag"
-    :tags="tags"
-    :isLoading="isTagLoading"
-    :error="tagError"
-  />
-
   <!-- if note is laoding -->
   <div v-if="isLoading" class="flex justify-center items-center h-full">
     Loading...
