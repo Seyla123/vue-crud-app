@@ -11,7 +11,7 @@ import { storeToRefs } from "pinia";
 
 const noteStore = useNoteStore();
 const { notes: data, isLoading } = storeToRefs(noteStore);
-const { getNotes,deleteNote } = noteStore;
+const { getNotes, deleteNote } = noteStore;
 
 // query to get notes by tag name
 const selected = reactive({
@@ -26,8 +26,9 @@ const { data: tags, isLoading: isTagLoading, error: tagError } = useGetTag();
 
 onMounted(async () => {
   await getNotes();
+  console.log("this is data getNotes ");
 });
-console.log('loading : ', isLoading.value);
+console.log("loading : ", isLoading.value);
 
 // handle click tag
 const handleClickTag = async (tag) => {

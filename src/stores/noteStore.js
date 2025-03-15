@@ -10,8 +10,10 @@ import {
   serverTimestamp,
   getDoc,
 } from "firebase/firestore";
+import { useAuthStore } from "@/stores/authStore";
 
-const notesCollectionRef = collection(db, "notes");
+let notesCollectionRef;
+let getNotesSnapshot = null;
 
 export const useNoteStore = defineStore("note", {
   state: () => ({
@@ -24,6 +26,12 @@ export const useNoteStore = defineStore("note", {
     isUpadating: false,
   }),
   actions: {
+    init() {
+      const authStore = useAuthStore();
+      console.log("this is auth store : ", authStore.user);
+      notesCollectionRef = collection(db, "users", authStore.user.id, "notes");
+      this.getNotes();
+    },
     /**
      * get notes real time updating
      * IMPORTANT : we can't use ( finally catch ) to set isLoading in this real time updating
@@ -31,7 +39,7 @@ export const useNoteStore = defineStore("note", {
     async getNotes() {
       this.isLoading = true;
       try {
-        onSnapshot(notesCollectionRef, (querySnapshot) => {
+        getNotesSnapshot = onSnapshot(notesCollectionRef, (querySnapshot) => {
           this.notes = querySnapshot.docs.map((doc) => ({
             id: doc.id,
             ...doc.data(),
@@ -56,8 +64,9 @@ export const useNoteStore = defineStore("note", {
         if (docSnap.exists()) {
           this.note = {
             id: docSnap.id,
-            ...docSnap.data()
+            ...docSnap.data(),
           };
+          console.log("this note : ", this.note);
         } else {
           // docSnap.data() will be undefined in this case
           console.log("No such document!");
@@ -98,12 +107,10 @@ export const useNoteStore = defineStore("note", {
         console.log("this note error : ", error);
       }
     },
-    async updateNote(note, id) {
+    async updateNote(id, note) {
       this.isUpadating = true;
       try {
-        await updateDoc(doc(notesCollectionRef, id), {
-          title: note.title,
-        });
+        await updateDoc(doc(notesCollectionRef, id), note);
       } catch (error) {
         console.log("updating error : ", error);
       } finally {
@@ -112,6 +119,10 @@ export const useNoteStore = defineStore("note", {
     },
     setNote(noteData) {
       this.notes = noteData;
+    },
+    clearNotes() {
+      this.notes = [];
+      if (getNotesSnapshot) getNotesSnapshot();
     },
   },
 });

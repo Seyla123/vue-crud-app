@@ -4,7 +4,6 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import NoteForm from "@/components/NoteForm.vue";
 import { useTitle } from "@vueuse/core";
-import { useCreateNote } from "@/services/noteApi";
 import { useNoteStore } from "@/stores/noteStore";
 import { storeToRefs } from "pinia";
 const router = useRouter();
@@ -20,11 +19,7 @@ const note = ref({
   title: "",
   content: "",
   tag: "",
-  date: "",
 });
-
-// create note use mutation
-const { mutate: createNote, error } = useCreateNote();
 
 // create note
 const handleSubmit = async () => {
@@ -36,8 +31,6 @@ const handleSubmit = async () => {
     console.log(err);
   }
 };
-
-console.log('is creating : ', isCreating.value);
 
 </script>
 <template>

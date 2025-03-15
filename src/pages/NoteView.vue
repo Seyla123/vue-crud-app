@@ -1,8 +1,7 @@
 <script setup>
-import {  useGetNoteById } from "@/services/noteApi";
 import { useDateFormat, useTitle } from "@vueuse/core";
 import { ArrowLeftIcon, PencilIcon, TrashIcon } from "lucide-vue-next";
-import { computed, onMounted, reactive, ref, watch } from "vue";
+import {  onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import ModalDelete from "@/components/ModalDelete.vue";
 import { useNoteStore } from "@/stores/noteStore";
@@ -30,14 +29,9 @@ onMounted(async () => {
   
 });
 
-console.log('is getOneNote : ', data);
 const isModalOpen = reactive({
   deleteModal: false,
 });
-
-console.log("this is log : ", isModalOpen.deleteModal);
-console.log('this data : ', note);
-
 
 /*
   watch note data loaded from query,
@@ -55,7 +49,6 @@ watch(
 
 // convert firestore timestamp to readable date
 const formattedDate = (timestamp) => {
-  
   if (!timestamp) return "No date";
   const date = timestamp.toDate();
   return useDateFormat(date, "YYYY-MM-DD HH:mm:ss").value;
