@@ -1,26 +1,20 @@
 <script setup>
 import Tag from "@/components/Tag.vue";
-import axios from "axios";
-import { ref, onMounted } from "vue";
 defineProps({
   handleClickTag: Function,
   selectedTag: String,
-});
-const tags = ref([]);
-const isLoading = ref(true);
-onMounted(async () => {
-  try {
-    const response = await axios.get("http://localhost:8000/tags");
-    tags.value = response.data;
-  } catch (error) {
-    console.log(error);
-  } finally {
-    isLoading.value = false;
-  }
+  tags: Array,
+  isLoading: {
+    type: Boolean,
+    default: false,
+  },
+  error: String,
 });
 </script>
 <template>
   <p v-if="isLoading">Loading...</p>
+
+  <p v-else-if="error">Error: {{ error }}></p>
   <section v-else class="flex gap-2">
     <Tag
       v-for="tag in tags"
@@ -28,6 +22,11 @@ onMounted(async () => {
       :tag="tag.name"
       :isActive="selectedTag === tag.name"
       @click="handleClickTag(tag.name)"
+    />
+    <Tag
+      :tag="'All'"
+      :isActive="selectedTag === ''"
+      @click="handleClickTag('')"
     />
   </section>
 </template>
