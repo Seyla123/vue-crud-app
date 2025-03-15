@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "server": "json-server --watch db.json --port 8000"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.4",
@@ -15,7 +14,7 @@
     "@vueuse/components": "^12.7.0",
     "@vueuse/core": "^12.7.0",
     "axios": "^1.7.9",
-    "json-server": "^1.0.0-beta.3",
+    "firebase": "^11.4.0",
     "lucide-vue-next": "^0.475.0",
     "pinia": "^3.0.1",
     "tailwindcss": "^4.0.4",

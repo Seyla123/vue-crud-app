@@ -1,37 +1,37 @@
 <script setup>
-import axios from "axios";
 import { ArrowLeftIcon } from "lucide-vue-next";
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import NoteForm from "@/components/NoteForm.vue";
 import { useTitle } from "@vueuse/core";
-import { useCreateNote } from "@/services/noteApi";
-
+import { useNoteStore } from "@/stores/noteStore";
+import { storeToRefs } from "pinia";
 const router = useRouter();
 
 // page title
 useTitle("Create Note");
+
+const noteStore = useNoteStore();
+const { isCreating } = storeToRefs(noteStore);
 
 // note create form state
 const note = ref({
   title: "",
   content: "",
   tag: "",
-  date: "",
 });
-
-// create note use mutation
-const { mutate: createNote, isLoading: isCreating, error } = useCreateNote();
 
 // create note
 const handleSubmit = async () => {
   try {
-    createNote(note.value);
+    // createNote(note.value);
+    await noteStore.addNote(note.value);
     router.push("/");
   } catch (err) {
     console.log(err);
   }
 };
+
 </script>
 <template>
   <div class="space-y-4">
@@ -45,6 +45,6 @@ const handleSubmit = async () => {
     </div>
 
     <!-- note create form -->
-    <NoteForm v-model="note" @submit="handleSubmit" />
+    <NoteForm v-model="note" @submit="handleSubmit" :isLoading="isCreating" />
   </div>
 </template>

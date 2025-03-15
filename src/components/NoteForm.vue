@@ -1,20 +1,27 @@
 <script setup>
-import { defineProps, defineEmits, computed } from "vue";
+import { computed } from "vue";
 
 defineEmits(["submit", "update:modelValue"]);
+
 const props = defineProps({
   modelValue: Object,
-  btnTitle:{
+  isLoading: {
+    type: Boolean,
+    default: false,
+  },
+  btnTitle: {
     type: String,
     default: "Create",
-  }
+  },
 });
+
 const note = computed({
   get: () => props.modelValue,
   set: (value) => emit("update:modelValue", value),
 });
 
 </script>
+
 <template>
   <form @submit.prevent="$emit('submit')" action="" class="space-y-4">
     <div class="flex flex-col">
@@ -44,19 +51,13 @@ const note = computed({
         v-model="note.tag"
       />
     </div>
-    <div class="flex flex-col">
-      <label for="date" class="text-sm font-semibold">Date</label>
-      <input
-        type="date"
-        class="border-1 p-2 rounded-lg focus:outline-none"
-        v-model="note.date"
-      />
-    </div>
     <button
       type="submit"
       class="bg-[#6c63ff] text-white px-4 py-2 rounded-lg hover:bg-[#6c63ff]/90 transition duration-300 ease-in-out"
+      :disabled="isLoading"
     >
-      {{ btnTitle }}
+      <span v-if="isLoading">Loading...</span>
+      <span v-else>{{ btnTitle }}</span>
     </button>
   </form>
 </template>

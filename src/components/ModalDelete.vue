@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import { useDeleteNote } from "@/services/noteApi";
 import { useRouter } from "vue-router";
+import { useNoteStore } from "@/stores/noteStore";
 
 defineProps({
   modelValue: {
@@ -27,25 +28,22 @@ const onClose = () => {
   emit("update:modelValue", false);
 };
 
-
 onClickOutside(modalCardRef, onClose);
 
 // mutate to delete note
-const { mutate: deleteNote } = useDeleteNote();
+const noteStore = useNoteStore();
+const { deleteNote } = noteStore;
 
 // on delete note
-const onDelete = (noteId) => {
+const onDelete =  (noteId) => {
   console.log("this delete", noteId);
-  deleteNote(noteId, {
-    onSuccess: () => {
-      router.push("/");
-    },
-    onError: (err) => {
-      console.error("Error deleting note:", err);
-    },
-  });
+  try {
+    deleteNote(noteId);
+    router.push("/");
+  } catch (error) {
+    console.log("delete error : ", error);
+  }
 };
-
 </script>
 <template>
   <div

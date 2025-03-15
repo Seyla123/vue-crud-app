@@ -1,10 +1,11 @@
 <script setup>
-import {  useGetNoteById } from "@/services/noteApi";
-import { useTitle } from "@vueuse/core";
+import { useDateFormat, useTitle } from "@vueuse/core";
 import { ArrowLeftIcon, PencilIcon, TrashIcon } from "lucide-vue-next";
-import { reactive, ref, watch } from "vue";
+import {  onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import ModalDelete from "@/components/ModalDelete.vue";
+import { useNoteStore } from "@/stores/noteStore";
+import { storeToRefs } from "pinia";
 
 // page title
 useTitle("Note Detail");
@@ -18,13 +19,19 @@ const id = route.params.id;
 // note detail state
 const note = ref({});
 
+const noteStore = useNoteStore();
+const { note: data, isLoading ,isError,error} = storeToRefs(noteStore);
+const { getOneNote } = noteStore;
+
+// query to get note by id
+onMounted(async () => {
+  await getOneNote(id);
+  
+});
+
 const isModalOpen = reactive({
   deleteModal: false,
 });
-
-console.log("this is log : ", isModalOpen.deleteModal);
-// query to get note by id
-const { data, isLoading, isError,error } = useGetNoteById(id);
 
 /*
   watch note data loaded from query,
@@ -40,7 +47,12 @@ watch(
   { immediate: true }
 );
 
-//delete note
+// convert firestore timestamp to readable date
+const formattedDate = (timestamp) => {
+  if (!timestamp) return "No date";
+  const date = timestamp.toDate();
+  return useDateFormat(date, "YYYY-MM-DD HH:mm:ss").value;
+};
 
 </script>
 <template>
@@ -95,7 +107,7 @@ watch(
         <span class="font-semibold">Tag:</span> {{ note.tag }}
       </p>
       <p class="text-gray-600">
-        <span class="font-semibold">Date:</span> {{ note.date }}
+        <span class="font-semibold">Date:</span> {{ formattedDate(note.date) }}
       </p>
     </div>
   </div>
